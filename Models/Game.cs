@@ -57,6 +57,11 @@ namespace TextGame.Models
       Console.WriteLine(".");
       System.Console.WriteLine("What would you like to do? (type 'help' for help)");
       string[] command = Console.ReadLine().Split(' ');
+      for (int i = 2; i < command.Length; i++)
+      {
+          command[1]+= " ";
+          command[1] += command[i];
+      }
       switch (command[0])
       {
         case "go":
@@ -70,17 +75,16 @@ namespace TextGame.Models
           if (command.Length > 1)
           {
             Console.Clear();
-            System.Console.WriteLine($"you got {command[1]}");
+            Get(command[1]);
           }
           break;
         case "use":
           if (command.Length > 1)
           {
             Console.Clear();
-            System.Console.WriteLine($"you used {command[1]}");
+            System.Console.WriteLine($"you used {command[1]}...  Nothing Happend.");
           }
           break;
-
         case "help":
           Console.Clear();
           Help();
@@ -90,11 +94,19 @@ namespace TextGame.Models
           System.Console.WriteLine("I dont Understand");
           break;
       }
-
-
-
-
-
+    }
+    public void Get(string newItem)
+    {
+        foreach (var item in CurrentRoom.Items)
+        {
+        if (item.Name==newItem)
+        {
+            CurrentPlayer.addItem(item);
+            Console.WriteLine($"you got {item.Name}");
+            return;
+        }
+        }
+        Console.WriteLine($"You look for {newItem}... but can't fine any.");
     }
     public void Move(string dir)
     {
@@ -105,7 +117,7 @@ namespace TextGame.Models
 
         return;
       }
-      Console.WriteLine("Invaid Selection");
+      Console.WriteLine($"You try to go {dir}... but can't.");
     }
     public void setCurrentRoom(Room newCurrent)
     {
