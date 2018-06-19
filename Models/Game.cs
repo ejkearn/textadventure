@@ -35,12 +35,14 @@ namespace TextGame.Models
       setCurrentRoom(room1);
       room2 = new Room("dark room", room2des);
       string room3des = "Upon entering the room you are greeted by a goblin.  Sluring his words he exclames 'You shall never leave this place! for I challange you to a game of wits!  Thus I know you are only armed with a ham Sandwich in combat of the mind!' as the goblin jests and belittles you. you find yourself becomming increasingly angry.  After many inslts He finaly says 'Here is Your Riddle. I'm older than time and older than space but never died. Who am I? <answer with 'answer +(your answer)'  REMEMBER! Case matters!>";
-      string room4des = "You are in the fourth room.  ";
+      string room4des = "In this small side room you see just some holes in the ground with a foul Smell eminating from them.  Dont linger here to long.";
       room3 = new Room("goblin room", room3des);
       room4 = new Room("room4", room4des);
       room5 = new Room("Win Room", "You have made it out of the dungeon!  Upon leaving you turn around and see you are leaving the 'Crunky Green Skins!' the areas hottest goblin club.  I remember now! you drank to much grog and mead last night and passed out on the dance floor!  You hope the bouncer is ok after that torch to the nose.  but you may be banned for life...");
 
       Item torch = new Item("torch", "You See a ", ".  It could be useful");
+      Item poop = new Item("goo", "You see a strange ", ".  Do you dare touch it? it may be usefull?... Maybe...");
+      room4.AddItem(poop);
       room1.AddItem(torch);
       room1.AddDirection("north", room2);
       room2.AddDirection("south", room1);
@@ -57,6 +59,7 @@ namespace TextGame.Models
       System.Console.WriteLine("To Move Type 'go +Direction'");
       System.Console.WriteLine("To get Type 'get +Item'");
       System.Console.WriteLine("To use Type 'use +Item'");
+      System.Console.WriteLine("To quit Type 'quit'");
       //   System.Console.WriteLine($"There May be other actions you can use from the room description Dont be afraid to experiment!");
     }
     public void Gaming()
@@ -137,7 +140,7 @@ namespace TextGame.Models
           {
             System.Console.WriteLine("The Goblin Laughs at your attempt. And Jeers 'Not even close!  I thought you armed with a Ham Sandwich, but now I doubt if you are that well equiped.'");
           }else{
-            System.Console.WriteLine("the whinds aroud say 'wrong answer...");
+            System.Console.WriteLine("the winds aroud say 'wrong answer...");
           }
           break;
         case "quit":
@@ -209,7 +212,7 @@ namespace TextGame.Models
         {
           Console.WriteLine("You solve the goblin's Riddle by shoving a burning torch right up his nose! the gobin screeches you see a new path open.");
           CurrentRoom.AddDirection("east", room5);
-          CurrentRoom.Description = "";
+          CurrentRoom.Description = "A burning Goblin in the corner and the Exit to the east.";
           return;
         }
         else if (itemName == "torch")
