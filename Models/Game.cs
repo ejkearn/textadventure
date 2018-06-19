@@ -14,6 +14,7 @@ namespace TextGame.Models
     public Room room3 { get; set; }
     public Room room4 { get; set; }
     public Room room5 { get; set; }
+    public int goblinHealth{get; set; }=3;
 
     public void Reset()
     {
@@ -35,9 +36,9 @@ namespace TextGame.Models
       setCurrentRoom(room1);
       room2 = new Room("dark room", room2des);
       string room3des = "Upon entering the room you are greeted by a goblin.  Sluring his words he exclames 'You shall never leave this place! for I challange you to a game of wits!  Thus I know you are only armed with a ham Sandwich in combat of the mind!' as the goblin jests and belittles you. you find yourself becomming increasingly angry.  After many inslts He finaly says 'Here is Your Riddle. I'm older than time and older than space but never died. Who am I? <answer with 'answer +(your answer)'  REMEMBER! Case matters!>";
-      string room4des = "In this small side room you see just some holes in the ground with a foul Smell eminating from them.  Dont linger here to long.";
+      string room4des = "In this small side room you see just some holes in the ground with a foul Smell eminating from them.  Dont linger here to long... But wait!  from behind a large goblin Slams the door and bolts it shut!  She screeches 'This is the ladies room!  you dont belong! I chalange you to a battle!'  You must Fight!  You have 3 fight commands <'fight +(command)'>  the three commands are 'rock' 'paper' 'or' 'scissors'.";
       room3 = new Room("goblin room", room3des);
-      room4 = new Room("room4", room4des);
+      room4 = new Room("bathroom", room4des);
       room5 = new Room("Win Room", "You have made it out of the dungeon!  Upon leaving you turn around and see you are leaving the 'Crunky Green Skins!' the areas hottest goblin club.  I remember now! you drank to much grog and mead last night and passed out on the dance floor!  You hope the bouncer is ok after that torch to the nose.  but you may be banned for life...");
 
       Item torch = new Item("torch", "You See a ", ".  It could be useful");
@@ -47,7 +48,7 @@ namespace TextGame.Models
       room1.AddDirection("north", room2);
       room2.AddDirection("south", room1);
       room3.AddDirection("south", room2);
-      room4.AddDirection("west", room2);
+      // room4.AddDirection("west", room2);
 
 
 
@@ -135,13 +136,18 @@ namespace TextGame.Models
           Console.Clear();
           Help();
           break;
-          case "answer":
+        case "answer":
           if (CurrentRoom.Name == "goblin room")
           {
             System.Console.WriteLine("The Goblin Laughs at your attempt. And Jeers 'Not even close!  I thought you armed with a Ham Sandwich, but now I doubt if you are that well equiped.'");
-          }else{
+          }
+          else
+          {
             System.Console.WriteLine("the winds aroud say 'wrong answer...");
           }
+          break;
+        case "fight":
+          Battle(command[1]);
           break;
         case "quit":
           SetPlaying(false);
@@ -152,6 +158,96 @@ namespace TextGame.Models
           System.Console.WriteLine("I dont Understand");
           break;
       }
+    }
+
+    private void Battle(string v)
+    {
+
+      CurrentRoom.Description = "An angry Goblin waits for you to Fight!  You have 3 fight commands <'fight +(command)'>  the three commands are 'rock' 'paper' 'or' 'scissors'.";
+      // while (goblinHealth > 0)
+      // {
+      if(!BattleLogic(v))
+      {
+        CurrentPlayer.Health -= 25;
+        
+        if (CurrentPlayer.Health < 0)
+        {
+          System.Console.WriteLine("The Goblin Killed you for your digressions.");
+          SetPlaying(false);
+        }
+        else{
+          System.Console.WriteLine("You have Lost the Battle but not the war! Keep fighting!");
+        }
+      }
+      else{
+        goblinHealth --;
+        if (goblinHealth>0)
+        {
+        System.Console.WriteLine("The Goblin Looks Stund having Lost a Round. but comes back for more!");
+        }
+        else{
+          System.Console.WriteLine("Defeted The goblin slumps to the Floor. Dead... Tired from battle.");
+          room4.AddDirection("west", room2);
+        }
+      // }
+          
+      }
+    }
+
+    private bool BattleLogic(string v)
+    {
+      Random r = new Random();
+      int rInt = (r.Next(0, 2))*2;
+      System.Console.WriteLine(rInt);
+      int pInt = 1;
+      switch (v)
+      {
+        case "rock":
+        if (pInt > rInt)
+        {
+          Console.Clear();
+          System.Console.WriteLine("The Goblin Threw Scissors!");
+          return true;
+        }else
+        {
+          Console.Clear();
+          System.Console.WriteLine("The Goblin Threw Paper!");
+          return false;
+        }
+        
+        case "scissors":
+                if (pInt > rInt)
+        {
+          Console.Clear();
+          System.Console.WriteLine("The Goblin Threw Paper!");
+          return true;
+        }else
+        {
+          Console.Clear();
+          System.Console.WriteLine("The Goblin Threw Rock!");
+          return false;
+        }
+          
+        case "paper":
+                if (pInt > rInt)
+        {
+          Console.Clear();
+          System.Console.WriteLine("The Goblin Threw Rock!");
+          return true;
+        }else
+        {
+          Console.Clear();
+          System.Console.WriteLine("The Goblin Threw Scissors!");
+          return false;
+        }
+          
+        default:
+        Console.Clear();
+        System.Console.WriteLine("Invalid Attack!");
+        return false;
+      }
+    
+
     }
 
     public void SetPlaying(bool ling)
