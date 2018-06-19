@@ -9,12 +9,8 @@ namespace TextGame
     {
       Game Game = new Game();
       Game.Setup();
-     
-      bool Gaming = true;
-      while (Gaming)
-      {
-        Game.action();
-      }
+      Game.Gaming();
+      
     }
   }
 }

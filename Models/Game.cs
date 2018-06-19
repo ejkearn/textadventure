@@ -8,6 +8,12 @@ namespace TextGame.Models
   {
     public Room CurrentRoom { get; set; }
     public Player CurrentPlayer { get; set; }
+    public bool Playing { get; set; } = true;
+    public Room room1 { get; set; }
+    public Room room2 { get; set; }
+    public Room room3 { get; set; }
+    public Room room4 { get; set; }
+    public Room room5 { get; set; }
 
     public void Reset()
     {
@@ -19,18 +25,27 @@ namespace TextGame.Models
       Console.ForegroundColor = ConsoleColor.White;
       Console.BackgroundColor = ConsoleColor.Black;
       Console.Clear();
-      System.Console.WriteLine();
+      System.Console.WriteLine("Opening your blurry eyes, and look around. You cant remember What happened, or where you are.  A faint throbbing pusates through your head.  A single thought 'What did I do last night'.");
       Player plr = new Player();
       CurrentPlayer = plr;
-      string room1des = "You are in the first room.";
-      string room2des = "You are in the Second room.";
-      Room room1 = new Room("Room1", room1des);
+      string room1des = "The room is bare with small colorfull bits of papper scattered around on the floor. The floor consists of large colored Squares illuminated by a reflective glass ball from the celing. A faint 'Thump', 'Thump', 'Un Tiss', 'Un Tiss' is heard from large black boxes laid out in each corrner of the room";
+      string room2des = "You find yourself in a dark room. All you can see is the door behind you and darkness before you...";
+
+      room1 = new Room("party room", room1des);
       setCurrentRoom(room1);
-      Room room2 = new Room("Room2", room2des);
-      Item sword = new Item("torch", "You See a ", ".  It could be useful");
-      room1.AddItem(sword);
+      room2 = new Room("dark room", room2des);
+      string room3des = "Upon entering the room you are greeted by a goblin.  Sluring his words he exclames 'You shall never leave this place! for I challange you to a game of wits!  Thus I know you are only armed with a ham Sandwich in combat of the mind!' as the goblin jests and belittles you. you find yourself becomming increasingly angry.  After many inslts He finaly says 'Here is Your Riddle. I'm older than time and older than space but never died. Who am I? <answer with 'answer +(your answer)'  REMEMBER! Case matters!>";
+      string room4des = "You are in the fourth room.  ";
+      room3 = new Room("goblin room", room3des);
+      room4 = new Room("room4", room4des);
+      room5 = new Room("Win Room", "You have made it out of the dungeon!  Upon leaving you turn around and see you are leaving the 'Crunky Green Skins!' the areas hottest goblin club.  I remember now! you drank to much grog and mead last night and passed out on the dance floor!  You hope the bouncer is ok after that torch to the nose.  but you may be banned for life...");
+
+      Item torch = new Item("torch", "You See a ", ".  It could be useful");
+      room1.AddItem(torch);
       room1.AddDirection("north", room2);
       room2.AddDirection("south", room1);
+      room3.AddDirection("south", room2);
+      room4.AddDirection("west", room2);
 
 
 
@@ -43,6 +58,14 @@ namespace TextGame.Models
       System.Console.WriteLine("To get Type 'get +Item'");
       System.Console.WriteLine("To use Type 'use +Item'");
       //   System.Console.WriteLine($"There May be other actions you can use from the room description Dont be afraid to experiment!");
+    }
+    public void Gaming()
+    {
+      while (Playing)
+      {
+        action();
+      }
+
     }
     public void action()
     {
@@ -109,8 +132,16 @@ namespace TextGame.Models
           Console.Clear();
           Help();
           break;
-          case "quit":
-          
+          case "answer":
+          if (CurrentRoom.Name == "goblin room")
+          {
+            System.Console.WriteLine("The Goblin Laughs at your attempt. And Jeers 'Not even close!  I thought you armed with a Ham Sandwich, but now I doubt if you are that well equiped.'");
+          }else{
+            System.Console.WriteLine("the whinds aroud say 'wrong answer...");
+          }
+          break;
+        case "quit":
+          SetPlaying(false);
           // System.Net.Mime.MediaTypeNames.Application.Exit();
           break;
         default:
@@ -118,6 +149,11 @@ namespace TextGame.Models
           System.Console.WriteLine("I dont Understand");
           break;
       }
+    }
+
+    public void SetPlaying(bool ling)
+    {
+      Playing = ling;
     }
     public void Get(string newItem)
     {
@@ -155,7 +191,33 @@ namespace TextGame.Models
       Item TestItem = CurrentPlayer.HasItem(itemName);
       if (TestItem != null)
       {
-        CurrentRoom.UseItem(TestItem);
+        if (itemName == "torch" && CurrentRoom.Name == "dark room")
+        {
+          CurrentRoom.AddDirection("north", room3);
+          CurrentRoom.AddDirection("east", room4);
+          CurrentRoom.Description = "It appears to be a hallway with one side door and a door opposite the way you came.  Strange Colorfull yet indecipherable imagery adorn the walls.";
+          Console.WriteLine("The room blazes with light.  You can finally see!  ");
+          return;
+        }
+        else if (itemName == "torch" && CurrentRoom.Name == "party room")
+        {
+          Console.WriteLine("The room is now LIT! Goblins pour from unseen cracks and paths, loud banging and rhythems start from the strange Boxes. They all start start raving you get crushed to death...");
+          SetPlaying(false);
+          return;
+        }
+        else if (itemName == "torch" && CurrentRoom.Name == "goblin room")
+        {
+          Console.WriteLine("You solve the goblin's Riddle by shoving a burning torch right up his nose! the gobin screeches you see a new path open.");
+          CurrentRoom.AddDirection("east", room5);
+          CurrentRoom.Description = "";
+          return;
+        }
+        else if (itemName == "torch")
+        {
+
+          return;
+        }
+
       }
       else
       {
@@ -168,6 +230,11 @@ namespace TextGame.Models
 
       CurrentRoom = null;
       CurrentPlayer = null;
+      // Room room1 = null;
+      // Room room2 = null;
+      // Room room3 = null;
+      // Room room4 = null;
+      // Room room5 = null;
     }
   }
 }

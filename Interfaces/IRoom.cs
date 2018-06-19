@@ -13,7 +13,7 @@ namespace TextGame.Interfaces
         Dictionary<string, Item> Specials {get; set;}
 
 
-        void UseItem(Item item);
+        bool UseItem(Item item);
 
     }
 }
