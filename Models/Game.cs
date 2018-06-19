@@ -20,12 +20,15 @@ namespace TextGame.Models
       Console.BackgroundColor = ConsoleColor.Black;
       Console.Clear();
       System.Console.WriteLine();
-      Player CurrentPlayer = new Player(null);
-      string room1des = "You are in the first room. Directions are ";
-      string room2des = "You are in the Second room. Directions are ";
+      Player plr = new Player();
+      CurrentPlayer = plr;
+      string room1des = "You are in the first room.";
+      string room2des = "You are in the Second room.";
       Room room1 = new Room("Room1", room1des);
       setCurrentRoom(room1);
       Room room2 = new Room("Room2", room2des);
+      Item sword = new Item("torch", "You See a ", ".  It could be useful");
+      room1.AddItem(sword);
       room1.AddDirection("north", room2);
       room2.AddDirection("south", room1);
 
@@ -44,23 +47,40 @@ namespace TextGame.Models
     public void action()
     {
 
-      Console.Write(CurrentRoom.Description);
-      foreach (var item in CurrentRoom.Directions)
+      Console.WriteLine(CurrentRoom.Description);
+      if (CurrentRoom.Items.Count > 0)
       {
-        Console.ForegroundColor = ConsoleColor.Green;
-        Console.Write("'");
-        Console.Write(item.Key);
-        Console.Write("'");
 
+        foreach (var item in CurrentRoom.Items)
+        {
+          Console.Write(item.DescriptionStart);
+          Console.ForegroundColor = ConsoleColor.Red;
+          Console.Write("'");
+          Console.Write(item.Name);
+          Console.Write("'");
+          Console.ForegroundColor = ConsoleColor.White;
+          Console.WriteLine(item.DescriptionEnd);
+        }
       }
-      Console.ForegroundColor = ConsoleColor.White;
-      Console.WriteLine(".");
+      if (CurrentRoom.Directions.Count > 0)
+      {
+        Console.Write("Directions are");
+        foreach (var item in CurrentRoom.Directions)
+        {
+          Console.ForegroundColor = ConsoleColor.Green;
+          Console.Write(" '");
+          Console.Write(item.Key);
+          Console.Write("'");
+        }
+        Console.ForegroundColor = ConsoleColor.White;
+        Console.WriteLine(".");
+      }
       System.Console.WriteLine("What would you like to do? (type 'help' for help)");
-      string[] command = Console.ReadLine().Split(' ');
+      string[] command = Console.ReadLine().ToLower().Split(' ');
       for (int i = 2; i < command.Length; i++)
       {
-          command[1]+= " ";
-          command[1] += command[i];
+        command[1] += " ";
+        command[1] += command[i];
       }
       switch (command[0])
       {
@@ -82,12 +102,16 @@ namespace TextGame.Models
           if (command.Length > 1)
           {
             Console.Clear();
-            System.Console.WriteLine($"you used {command[1]}...  Nothing Happend.");
+            UseItem(command[1]);
           }
           break;
         case "help":
           Console.Clear();
           Help();
+          break;
+          case "quit":
+          
+          // System.Net.Mime.MediaTypeNames.Application.Exit();
           break;
         default:
           Console.Clear();
@@ -97,16 +121,18 @@ namespace TextGame.Models
     }
     public void Get(string newItem)
     {
-        foreach (var item in CurrentRoom.Items)
+      foreach (var item in CurrentRoom.Items)
+      {
+        if (item.Name == newItem)
         {
-        if (item.Name==newItem)
-        {
-            CurrentPlayer.addItem(item);
-            Console.WriteLine($"you got {item.Name}");
-            return;
+          Item TestItem = new Item(item.Name, item.DescriptionStart, item.DescriptionEnd);
+          CurrentPlayer.addItem(TestItem);
+          Console.WriteLine($"you got {item.Name}");
+          CurrentRoom.RemoveItem(item.Name);
+          return;
         }
-        }
-        Console.WriteLine($"You look for {newItem}... but can't fine any.");
+      }
+      Console.WriteLine($"You look for {newItem}... but can't fine any.");
     }
     public void Move(string dir)
     {
@@ -126,7 +152,15 @@ namespace TextGame.Models
 
     public void UseItem(string itemName)
     {
-
+      Item TestItem = CurrentPlayer.HasItem(itemName);
+      if (TestItem != null)
+      {
+        CurrentRoom.UseItem(TestItem);
+      }
+      else
+      {
+        System.Console.WriteLine($"You don't Have {itemName}");
+      }
     }
 
     public Game()

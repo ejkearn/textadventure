@@ -6,13 +6,15 @@ namespace TextGame.Models
   public class Item : IItem
   {
     public string Name { get; set; }
-    public string Description { get; set; }
+    public string DescriptionStart { get; set; }
+    public string DescriptionEnd { get; set; }
 
 
-    public Item(string name, string description)
+    public Item(string name, string description1, string description2)
     {
         Name = name;
-        Description = description;
+        DescriptionStart = description1;
+        DescriptionEnd = description2;
     }
   }
 }

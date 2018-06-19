@@ -7,16 +7,28 @@ namespace TextGame.Models
   {
     public List<Item> Inventory { get; set; }
     public int Health {get; set;}
-
-    public Player(List<Item> inventory)
+    public Item HasItem(string name)
     {
-        Inventory = inventory;
-        Health = 100;
-
+      foreach (var item in Inventory)
+      {
+          if (item.Name ==name)
+          {
+            return item;
+          }
+      }
+      return null;
     }
+
     public void addItem(Item item)
     {
+      // System.Console.WriteLine(item.Name);
         Inventory.Add(item);
+    }
+    public Player()
+    {
+        Inventory = new List<Item>();
+        Health = 100;
+
     }
   }
 }

@@ -10,6 +10,7 @@ namespace TextGame.Interfaces
         List<Item> Items { get; set; }
 
         Dictionary<string, Room> Directions {get; set;}
+        Dictionary<string, Item> Specials {get; set;}
 
 
         void UseItem(Item item);
