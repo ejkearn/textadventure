@@ -187,6 +187,7 @@ namespace TextGame.Models
         }
         else{
           System.Console.WriteLine("Defeted The goblin slumps to the Floor. Dead... Tired from battle.");
+          CurrentRoom.Description = "With the Goblin defeated you are free to leave the room.";
           room4.AddDirection("west", room2);
         }
       // }
