@@ -125,7 +125,7 @@ namespace TextGame.Models
           Console.Write("'");
           Console.ForegroundColor = ConsoleColor.White;
           Console.WriteLine(item.DescriptionEnd);
-          
+
         }
         Console.WriteLine("--------------------------------------------------------------------------");
       }
@@ -181,7 +181,34 @@ namespace TextGame.Models
         case "answer":
           if (CurrentRoom.Name == "goblin room")
           {
-            System.Console.WriteLine("The Goblin Laughs at your attempt. And Jeers 'Not even close!  I thought you armed with a Ham Sandwich, but now I doubt if you are that well equiped.'");
+            if (CurrentPlayer.Health == 100)
+            {
+
+              System.Console.WriteLine("The Goblin Laughs at your attempt. And Jeers 'Not even close!  I thought you armed with a Ham Sandwich, but now I doubt if you are that well equiped.'");
+
+            }
+            else if (CurrentPlayer.Health < 100 && CurrentPlayer.Health > 50)
+            {
+              System.Console.WriteLine("The Goblin Exclaims 'Was that a guess or did you burp?  it was so dumb I dont know which.' ");
+            }
+            else if (CurrentPlayer.Health <= 50 && CurrentPlayer.Health > 25)
+            {
+              System.Console.WriteLine("the goblin chortles 'is that your final answer? Yes? Wrong.'");
+
+            }
+            else if (CurrentPlayer.Health <= 25 && CurrentPlayer.Health > 0)
+            {
+              System.Console.WriteLine("the Goblin Screams 'NOOOOOOO.  That was wrong'");
+
+            }else
+            {
+              Playing = false;
+              System.Console.WriteLine("The Goblin's wicked Taunts have gottent to you.  Your fragil psychy can handle it and your brain implodes creating a black hole, destroying the universe... thanks for that.");
+                
+            }
+            
+            CurrentPlayer.Health -= 25;
+
           }
           else
           {
