@@ -14,7 +14,7 @@ namespace TextGame.Models
     public Room room3 { get; set; }
     public Room room4 { get; set; }
     public Room room5 { get; set; }
-    public int goblinHealth{get; set; }=3;
+    public int goblinHealth { get; set; } = 3;
 
     public void Reset()
     {
@@ -149,6 +149,20 @@ namespace TextGame.Models
         case "fight":
           Battle(command[1]);
           break;
+        case "inventory":
+          var PlayerInv = CurrentPlayer.GetInventory();
+          if (PlayerInv.Count == 0)
+          {
+            System.Console.WriteLine("you don't have any Items.");
+              return;
+          }
+          Console.Write("You currently have: ");
+          foreach (var item in PlayerInv)
+          {
+            Console.Write(item.Name);
+          }
+          Console.WriteLine(".");
+          break;
         case "quit":
           SetPlaying(false);
           // System.Net.Mime.MediaTypeNames.Application.Exit();
@@ -166,88 +180,94 @@ namespace TextGame.Models
       CurrentRoom.Description = "An angry Goblin waits for you to Fight!  You have 3 fight commands <'fight +(command)'>  the three commands are 'rock' 'paper' 'or' 'scissors'.";
       // while (goblinHealth > 0)
       // {
-      if(!BattleLogic(v))
+      if (!BattleLogic(v))
       {
         CurrentPlayer.Health -= 25;
-        
+
         if (CurrentPlayer.Health < 0)
         {
           System.Console.WriteLine("The Goblin Killed you for your digressions.");
           SetPlaying(false);
         }
-        else{
+        else
+        {
           System.Console.WriteLine("You have Lost the Battle but not the war! Keep fighting!");
         }
       }
-      else{
-        goblinHealth --;
-        if (goblinHealth>0)
+      else
+      {
+        goblinHealth--;
+        if (goblinHealth > 0)
         {
-        System.Console.WriteLine("The Goblin Looks Stund having Lost a Round. but comes back for more!");
+          System.Console.WriteLine("The Goblin Looks Stund having Lost a Round. but comes back for more!");
         }
-        else{
+        else
+        {
           System.Console.WriteLine("Defeted The goblin slumps to the Floor. Dead... Tired from battle.");
           CurrentRoom.Description = "With the Goblin defeated you are free to leave the room.";
           room4.AddDirection("west", room2);
         }
-      // }
-          
+        // }
+
       }
     }
 
     private bool BattleLogic(string v)
     {
       Random r = new Random();
-      int rInt = (r.Next(0, 2))*2;
+      int rInt = (r.Next(0, 2)) * 2;
       System.Console.WriteLine(rInt);
       int pInt = 1;
       switch (v)
       {
         case "rock":
-        if (pInt > rInt)
-        {
-          Console.Clear();
-          System.Console.WriteLine("The Goblin Threw Scissors!");
-          return true;
-        }else
-        {
-          Console.Clear();
-          System.Console.WriteLine("The Goblin Threw Paper!");
-          return false;
-        }
-        
+          if (pInt > rInt)
+          {
+            Console.Clear();
+            System.Console.WriteLine("The Goblin Threw Scissors!");
+            return true;
+          }
+          else
+          {
+            Console.Clear();
+            System.Console.WriteLine("The Goblin Threw Paper!");
+            return false;
+          }
+
         case "scissors":
-                if (pInt > rInt)
-        {
-          Console.Clear();
-          System.Console.WriteLine("The Goblin Threw Paper!");
-          return true;
-        }else
-        {
-          Console.Clear();
-          System.Console.WriteLine("The Goblin Threw Rock!");
-          return false;
-        }
-          
+          if (pInt > rInt)
+          {
+            Console.Clear();
+            System.Console.WriteLine("The Goblin Threw Paper!");
+            return true;
+          }
+          else
+          {
+            Console.Clear();
+            System.Console.WriteLine("The Goblin Threw Rock!");
+            return false;
+          }
+
         case "paper":
-                if (pInt > rInt)
-        {
-          Console.Clear();
-          System.Console.WriteLine("The Goblin Threw Rock!");
-          return true;
-        }else
-        {
-          Console.Clear();
-          System.Console.WriteLine("The Goblin Threw Scissors!");
-          return false;
-        }
-          
+          if (pInt > rInt)
+          {
+            Console.Clear();
+            System.Console.WriteLine("The Goblin Threw Rock!");
+            return true;
+          }
+          else
+          {
+            Console.Clear();
+            System.Console.WriteLine("The Goblin Threw Scissors!");
+            return false;
+          }
+
         default:
-        Console.Clear();
-        System.Console.WriteLine("Invalid Attack!");
-        return false;
+          Console.Clear();
+          System.Console.WriteLine("Invalid Attack!");
+          return false;
       }
-    
+
 
     }
 

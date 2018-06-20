@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using TextGame.Interfaces;
 
@@ -27,8 +28,15 @@ namespace TextGame.Models
     public Player()
     {
         Inventory = new List<Item>();
+        
         Health = 100;
 
+    }
+
+    internal List<Item> GetInventory()
+    {
+      
+      return Inventory;
     }
   }
 }
