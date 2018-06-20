@@ -9,7 +9,7 @@ namespace TextGame
     {
       Game Game = new Game();
       Game.Setup();
-      Game.Gaming();
+      
       
     }
   }

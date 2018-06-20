@@ -18,7 +18,7 @@ namespace TextGame.Models
 
     public void Reset()
     {
-
+      Setup();
     }
 
     public void Setup()
@@ -39,7 +39,7 @@ namespace TextGame.Models
       string room4des = "In this small side room you see just some holes in the ground with a foul Smell eminating from them.  Dont linger here to long... But wait!  from behind a large goblin Slams the door and bolts it shut!  She screeches 'This is the ladies room!  you dont belong! I chalange you to a battle!'  You must Fight!  You have 3 fight commands <'fight +(command)'>  the three commands are 'rock' 'paper' 'or' 'scissors'.";
       room3 = new Room("goblin room", room3des);
       room4 = new Room("bathroom", room4des);
-      room5 = new Room("Win Room", "You have made it out of the dungeon!  Upon leaving you turn around and see you are leaving the 'Crunky Green Skins!' the areas hottest goblin club.  I remember now! you drank to much grog and mead last night and passed out on the dance floor!  You hope the bouncer is ok after that torch to the nose.  but you may be banned for life...");
+      room5 = new Room("win room", "You have made it out of the dungeon!  Upon leaving you turn around and see you are leaving the 'Crunky Green Skins!' the areas hottest goblin club.  I remember now! you drank to much grog and mead last night and passed out on the dance floor!  You hope the bouncer is ok after that torch to the nose.  but you may be banned for life...");
 
       Item torch = new Item("torch", "You See a ", ".  It could be useful");
       Item poop = new Item("goo", "You see a strange ", ".  Do you dare touch it? it may be usefull?... Maybe...");
@@ -49,6 +49,7 @@ namespace TextGame.Models
       room2.AddDirection("south", room1);
       room3.AddDirection("south", room2);
       // room4.AddDirection("west", room2);
+      Gaming();
 
 
 
@@ -65,16 +66,53 @@ namespace TextGame.Models
     }
     public void Gaming()
     {
+      Playing = true;
       while (Playing)
       {
         action();
+        if (CurrentRoom.Name == "win room")
+        {
+          Playing = false;
+          Console.WriteLine(CurrentRoom.Description);
+        }
+      }
+      Playing = true;
+      if (CurrentRoom.Name != "win room")
+      {
+        System.Console.WriteLine("You have Lost:");
+      }
+      while (Playing)
+      {
+
+        System.Console.WriteLine("Play again? y/n");
+        string res = Console.ReadLine().ToLower();
+        if (res == "y")
+        {
+          Playing = false;
+          Reset();
+        }
+        else if (res == "n")
+        {
+          Playing = false;
+          return;
+        }
+        else
+        {
+          System.Console.WriteLine("I Don't understand");
+
+        }
       }
 
     }
     public void action()
     {
-
+      Console.WriteLine("--------------------------------------------------------------------------");
       Console.WriteLine(CurrentRoom.Description);
+      Console.WriteLine("--------------------------------------------------------------------------");
+      if (CurrentRoom.Name == "win room")
+      {
+        Playing = false;
+      }
       if (CurrentRoom.Items.Count > 0)
       {
 
@@ -87,7 +125,9 @@ namespace TextGame.Models
           Console.Write("'");
           Console.ForegroundColor = ConsoleColor.White;
           Console.WriteLine(item.DescriptionEnd);
+          
         }
+        Console.WriteLine("--------------------------------------------------------------------------");
       }
       if (CurrentRoom.Directions.Count > 0)
       {
@@ -101,8 +141,10 @@ namespace TextGame.Models
         }
         Console.ForegroundColor = ConsoleColor.White;
         Console.WriteLine(".");
+        Console.WriteLine("--------------------------------------------------------------------------");
       }
       System.Console.WriteLine("What would you like to do? (type 'help' for help)");
+      Console.WriteLine("--------------------------------------------------------------------------");
       string[] command = Console.ReadLine().ToLower().Split(' ');
       for (int i = 2; i < command.Length; i++)
       {
@@ -154,7 +196,7 @@ namespace TextGame.Models
           if (PlayerInv.Count == 0)
           {
             System.Console.WriteLine("you don't have any Items.");
-              return;
+            return;
           }
           Console.Write("You currently have: ");
           foreach (var item in PlayerInv)
@@ -165,7 +207,7 @@ namespace TextGame.Models
           break;
         case "quit":
           SetPlaying(false);
-          // System.Net.Mime.MediaTypeNames.Application.Exit();
+
           break;
         default:
           Console.Clear();
