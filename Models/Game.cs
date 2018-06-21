@@ -161,6 +161,10 @@ namespace TextGame.Models
           {
             Move(command[1]);
           }
+          else
+          {
+            System.Console.WriteLine($"{command[0]} +?.");
+          }
           break;
         case "get":
           Console.Clear();
@@ -168,12 +172,20 @@ namespace TextGame.Models
           {
             Get(command[1]);
           }
+          else
+          {
+            System.Console.WriteLine($"{command[0]} +?.");
+          }
           break;
         case "use":
           Console.Clear();
           if (command.Length > 1)
           {
             UseItem(command[1]);
+          }
+          else
+          {
+            System.Console.WriteLine($"{command[0]} +?.");
           }
           break;
         case "help":
@@ -221,12 +233,20 @@ namespace TextGame.Models
               System.Console.WriteLine("the winds aroud say 'wrong answer...");
             }
           }
+          else
+          {
+            System.Console.WriteLine($"{command[0]} +?.");
+          }
           break;
         case "fight":
           Console.Clear();
           if (command.Length > 1)
           {
             Battle(command[1]);
+          }
+          else
+          {
+            System.Console.WriteLine($"{command[0]} +?.");
           }
           break;
         case "inventory":
