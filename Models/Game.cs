@@ -58,10 +58,12 @@ namespace TextGame.Models
     }
     public void Help()
     {
-      System.Console.WriteLine("To Move Type 'go +Direction'");
-      System.Console.WriteLine("To get Type 'get +Item'");
-      System.Console.WriteLine("To use Type 'use +Item'");
-      System.Console.WriteLine("To quit Type 'quit'");
+      Console.Clear();
+      System.Console.WriteLine("To Move Type 'go +Direction'.");
+      System.Console.WriteLine("To get Type 'get +Item'.");
+      System.Console.WriteLine("To use Type 'use +Item'.");
+      System.Console.WriteLine("To Look at your inventory Type 'inventory'.");
+      System.Console.WriteLine("To quit Type 'quit'.");
       //   System.Console.WriteLine($"There May be other actions you can use from the room description Dont be afraid to experiment!");
     }
     public void Gaming()
@@ -154,23 +156,23 @@ namespace TextGame.Models
       switch (command[0])
       {
         case "go":
+          Console.Clear();
           if (command.Length > 1)
           {
-            Console.Clear();
             Move(command[1]);
           }
           break;
         case "get":
+          Console.Clear();
           if (command.Length > 1)
           {
-            Console.Clear();
             Get(command[1]);
           }
           break;
         case "use":
+          Console.Clear();
           if (command.Length > 1)
           {
-            Console.Clear();
             UseItem(command[1]);
           }
           break;
@@ -179,47 +181,57 @@ namespace TextGame.Models
           Help();
           break;
         case "answer":
-          if (CurrentRoom.Name == "goblin room")
+          Console.Clear();
+          if (command.Length > 1)
           {
-            if (CurrentPlayer.Health == 100)
+            if (CurrentRoom.Name == "goblin room")
             {
+              if (CurrentPlayer.Health == 100)
+              {
 
-              System.Console.WriteLine("The Goblin Laughs at your attempt. And Jeers 'Not even close!  I thought you armed with a Ham Sandwich, but now I doubt if you are that well equiped.'");
+                System.Console.WriteLine("The Goblin Laughs at your attempt. And Jeers 'Not even close!  I thought you armed with a Ham Sandwich, but now I doubt if you are that well equiped.'");
+
+              }
+              else if (CurrentPlayer.Health < 100 && CurrentPlayer.Health > 50)
+              {
+                System.Console.WriteLine("The Goblin Exclaims 'Was that a guess or did you burp?  it was so dumb I dont know which.' ");
+              }
+              else if (CurrentPlayer.Health <= 50 && CurrentPlayer.Health > 25)
+              {
+                System.Console.WriteLine("the goblin chortles 'is that your final answer? Yes? Wrong.'");
+
+              }
+              else if (CurrentPlayer.Health <= 25 && CurrentPlayer.Health > 0)
+              {
+                System.Console.WriteLine("the Goblin Screams 'NOOOOOOO.  That was wrong'");
+
+              }
+              else
+              {
+                Playing = false;
+                System.Console.WriteLine("The Goblin's wicked Taunts have gottent to you.  Your fragil psychy can handle it and your brain implodes creating a black hole, destroying the universe... thanks for that.");
+
+              }
+
+              CurrentPlayer.Health -= 25;
 
             }
-            else if (CurrentPlayer.Health < 100 && CurrentPlayer.Health > 50)
+            else
             {
-              System.Console.WriteLine("The Goblin Exclaims 'Was that a guess or did you burp?  it was so dumb I dont know which.' ");
+              System.Console.WriteLine("the winds aroud say 'wrong answer...");
             }
-            else if (CurrentPlayer.Health <= 50 && CurrentPlayer.Health > 25)
-            {
-              System.Console.WriteLine("the goblin chortles 'is that your final answer? Yes? Wrong.'");
-
-            }
-            else if (CurrentPlayer.Health <= 25 && CurrentPlayer.Health > 0)
-            {
-              System.Console.WriteLine("the Goblin Screams 'NOOOOOOO.  That was wrong'");
-
-            }else
-            {
-              Playing = false;
-              System.Console.WriteLine("The Goblin's wicked Taunts have gottent to you.  Your fragil psychy can handle it and your brain implodes creating a black hole, destroying the universe... thanks for that.");
-                
-            }
-            
-            CurrentPlayer.Health -= 25;
-
-          }
-          else
-          {
-            System.Console.WriteLine("the winds aroud say 'wrong answer...");
           }
           break;
         case "fight":
-          Battle(command[1]);
+          Console.Clear();
+          if (command.Length > 1)
+          {
+            Battle(command[1]);
+          }
           break;
         case "inventory":
           var PlayerInv = CurrentPlayer.GetInventory();
+          Console.Clear();
           if (PlayerInv.Count == 0)
           {
             System.Console.WriteLine("you don't have any Items.");
@@ -233,6 +245,7 @@ namespace TextGame.Models
           Console.WriteLine(".");
           break;
         case "quit":
+          Console.Clear();
           SetPlaying(false);
 
           break;
@@ -283,6 +296,7 @@ namespace TextGame.Models
 
     private bool BattleLogic(string v)
     {
+      Console.Clear();
       Random r = new Random();
       int rInt = (r.Next(0, 2)) * 2;
       System.Console.WriteLine(rInt);
@@ -346,6 +360,7 @@ namespace TextGame.Models
     }
     public void Get(string newItem)
     {
+      Console.Clear();
       foreach (var item in CurrentRoom.Items)
       {
         if (item.Name == newItem)
@@ -361,7 +376,7 @@ namespace TextGame.Models
     }
     public void Move(string dir)
     {
-
+      Console.Clear();
       if (CurrentRoom.Directions.ContainsKey(dir))
       {
         setCurrentRoom(CurrentRoom.Directions[dir]);
@@ -377,6 +392,7 @@ namespace TextGame.Models
 
     public void UseItem(string itemName)
     {
+      Console.Clear();
       Item TestItem = CurrentPlayer.HasItem(itemName);
       if (TestItem != null)
       {
